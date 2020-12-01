@@ -1,89 +1,23 @@
-const App = () => {
-    const [userHistoryList, setUserList] = React.useState(
-        JSON.parse(localStorage.getItem("UserHistory") || "[]")
-    );
-    const addNewUser = (newUser) => {
-        setUserHistoryList([...userHistoryList, newUser]);
-    };
-    const removeUser = (key) => {
-        setUserHistoryList(
-            userHistoryList.filter((item) => item.key !== key)
-        );
-    };
-    const setUserHistoryList = (userHistoryList) => {
-        setUserList(userHistoryList);
-        localStorage.setItem("UserHistory", JSON.stringify(userHistoryList));
-    };
-
+const UserForm = ({ addUser }) => {
     return (
-        <React.Fragment>
-            <SubmitForm addNewUser={addNewUser} />
-            <UserHistory userHistoryList={userHistoryList} removeUser={removeUser} />
-        </React.Fragment>
-    );
-};
-
-const SubmitForm = ({ addNewUser }) => {
-    const margin = {
-        margin: "10px",
-    };
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [username, setUsername] = React.useState("");
-    const [progLanguage, setProgLanguage] = React.useState("C#");
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        const timestamp = new Date();
-        addNewUser({
-            key: timestamp.getTime(),
-            created: timestamp.toLocaleString(),
-            firstName: firstName,
-            lastName: lastName,
-            username: username,
-            progLanguage: progLanguage,
-        });
-        clear();
-    };
-
-    const clear = () => {
-        setFirstName("");
-        setLastName("");
-        setUsername("");
-        setProgLanguage("C#")
-    };
-
-    const handleChange = (event) => {
-        if (event.target.name === "firstName")
-            setFirstName(event.target.value);
-
-        if (event.target.name === "lastName")
-            setLastName(event.target.value);
-
-        if (event.target.name === "username")
-            setUsername(event.target.value);
-
-        if (event.target.name === "progLanguage")
-            setProgLanguage(event.target.value);
-    };
-
-    return (
-        <form style={margin} onSubmit={handleSubmit} autoComplete="off">
-            <h3>Create a new User</h3>
-            <div style={margin}>
-                <label>First Name: <input name="firstName" type="text"
-                    value={firstName} onChange={handleChange} /></label>
+        <form onSubmit={addUser} autoComplete="off" style={{ margin: "10px" }}>
+            <div style={{ margin: "10px" }}>
+                <label>First Name
+          <input type="text" id="firstName"></input>
+                </label>
             </div>
-            <div style={margin}>
-                <label>Last Name: <input name="lastName" type="text"
-                    value={lastName} onChange={handleChange} /></label>
+            <div style={{ margin: "10px" }}>
+                <label>Last Name
+          <input type="text" id="lastName"></input>
+                </label>
             </div>
-            <div style={margin}>
-                <label>Username: <input name="username" type="text"
-                    value={username} onChange={handleChange} /></label>
+            <div style={{ margin: "10px" }}>
+                <label>User Name
+          <input type="text" id="userName"></input>
+                </label>
             </div>
-            <div style={margin}>
-                <label> Programming Language: <select name="progLanguage" value={progLanguage} onChange={handleChange}>
+            <div style={{ margin: "10px" }}>
+                <label>Language: <select id="language">
                     <option value="C#">C#</option>
                     <option value="Java">Java</option>
                     <option value="C++">C++</option>
@@ -92,12 +26,12 @@ const SubmitForm = ({ addNewUser }) => {
                 </select>
                 </label>
             </div>
-            <button style={margin} type="submit">Create</button>
+            <button type="submit" name="createUser">Create</button>
         </form>
-    );
-};
+    )
+}
 
-const UserHistory = ({ userHistoryList, removeUser }) => {
+const UserTable = ({ usersList, removeUser }) => {
     const tableStyle = {
         border: "1px solid black",
         margin: "10px"
@@ -107,9 +41,6 @@ const UserHistory = ({ userHistoryList, removeUser }) => {
         padding: "0.5rem",
         border: "1px solid black"
     }
-    const handleRemove = (event) => {
-        removeUser(Number(event.target.name));
-    };
 
     return (
         <table style={tableStyle}>
@@ -125,16 +56,16 @@ const UserHistory = ({ userHistoryList, removeUser }) => {
                 </tr>
             </thead>
             <tbody>
-                {userHistoryList.map((userHistory) => {
+                {usersList.map((user) => {
                     return (
-                        <tr key={userHistory.key}>
-                            <td style={thtdStyle}>{userHistory.firstName}</td>
-                            <td style={thtdStyle}>{userHistory.lastName}</td>
-                            <td style={thtdStyle}>{userHistory.username}</td>
-                            <td style={thtdStyle}>{userHistory.progLanguage}</td>
-                            <td style={thtdStyle}>{userHistory.created}</td>
+                        <tr key={user.id}>
+                            <td style={thtdStyle}>{user.firstName}</td>
+                            <td style={thtdStyle}>{user.lastName}</td>
+                            <td style={thtdStyle}>{user.userName}</td>
+                            <td style={thtdStyle}>{user.language}</td>
+                            <td style={thtdStyle}>{user.created}</td>
                             <td style={thtdStyle}>
-                                <button type="button" onClick={handleRemove} style={{ width: "100%" }} name={userHistory.key}>
+                                <button type="button" onClick={() => removeUser(user.id)}>
                                     Remove
                 </button>
                             </td>
@@ -144,6 +75,37 @@ const UserHistory = ({ userHistoryList, removeUser }) => {
             </tbody>
         </table>
     );
-};
+}
 
+const App = () => {
+    const [userHistoryList, setUserHistoryList] = useState(JSON.parse(localStorage.getItem("UserHistory") || "[]"));
+    const addUser = (event) => {
+        const timestamp = new Date();
+        userHistoryList.push({
+            id: timestamp,
+            firstName: event.target.firstName.value,
+            lastName: event.target.lastName.value,
+            userName: event.target.userName.value,
+            language: event.target.language.value,
+            created: timestamp.toLocaleString()
+        });
+
+        setUserHistoryList(userHistoryList);
+        localStorage.setItem("UserHistory", JSON.stringify(userHistoryList));
+    };
+
+    const removeUser = (id) => {
+        const test = userHistoryList.filter((item) => item.id !== id); //почему через объявление отдельной переменной фильтр работает и сохраняет в стэйт
+        setUserHistoryList(test);
+        localStorage.setItem("UserHistory", JSON.stringify(test));
+        //setUserHistoryList(userHistoryList.filter((item) => item.id !== id)); // так не работает если удалить 1 элемент и обновить. Если удалить 2 подряд элемента, то удаляется 1, а второй остается
+        //localStorage.setItem("UserHistory", JSON.stringify(userHistoryList));
+    }
+    return (
+        <div>
+            <UserForm addUser={addUser} />
+            <UserTable usersList={userHistoryList} removeUser={removeUser} />
+        </div>
+    )
+}
 ReactDOM.render(<App />, document.getElementById("root"));
