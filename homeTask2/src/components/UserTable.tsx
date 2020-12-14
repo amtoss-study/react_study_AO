@@ -36,7 +36,7 @@ const UserTable = ({usersList, removeUser}: Props) => {
         {usersList.map((user) => {
           return (
             <tr key={user.id}>
-                <td style={thtdStyle}><Link to={`/details/${user.id}`}>{user.firstName}</Link></td>
+                <td style={thtdStyle}><Link to={`/users/${user.id}`}>{user.firstName}</Link></td>
                 
                 <td style={thtdStyle}>{user.lastName}</td>
                 <td style={thtdStyle}>{user.userName}</td>

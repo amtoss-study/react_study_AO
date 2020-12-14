@@ -5,19 +5,20 @@ import UserForm from './UserForm'
 
 type Props = {
     userHistoryList: UserItem[]
-    editUser: (id: number, userInfo: UserItem) => void
+    editUser: (userInfo: UserItem) => void
 }
 const UserDetails = ({userHistoryList, editUser}: Props) => {
     const {userId} = useParams<{userId: string}>();
-    const [isEditing, setEditing] = useState(false)
-    const user = userHistoryList.find(item => item.id.toString() === userId)
+    const [isEditing, setEditing] = useState(false);
+    const user = userHistoryList.find(item => item.id.toString() === userId);
     if(user === undefined){
-        return <p>User not found</p>
-    }
-    const { id, firstName } = user
-    const onEdit = (id: number, userInfo: UserItem) => {
-        editUser(userId, userInfo)
-        setEditing(false)
+        return <p>User not found</p>;
+    };
+    const onEdit = (userInfo: UserItem) => {
+        userInfo.id = user.id;
+        userInfo.created = user.created;
+        editUser(userInfo);
+        setEditing(false);
     }
 
     const style = {

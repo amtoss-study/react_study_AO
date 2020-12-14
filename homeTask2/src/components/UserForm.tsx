@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { UserItem } from './types'
 type Props = {
-    addUser: (event: any, userInfo: UserItem) => void
+    addUser: (userInfo: UserItem) => void
 }
 
 const UserForm = ({ addUser}: Props) => {
@@ -18,7 +18,8 @@ const UserForm = ({ addUser}: Props) => {
   const onChange = (event: any) => setUserInfo({ ...userInfo, [event.target.name]: event.target.value });
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
-    addUser(event, userInfo);
+    event.preventDefault()
+    addUser(userInfo);
   }
   
     return (
