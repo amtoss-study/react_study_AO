@@ -8,18 +8,18 @@ import UserDetails from './components/UserDetails';
 import useUsers from './hooks/useUsers'
 
 const App = () => {     
-  const { userHistoryList, addUser, editUser, removeUser } = useUsers()  
+  const { userHistoryList, isLoading, loadHistory, addUser, editUser, removeUser } = useUsers()  
   
   return(
     <BrowserRouter>
       <Nav />
       <Switch>
         <Route path="/users/:userId">
-            <UserDetails userHistoryList={userHistoryList} editUser={editUser}/>
+            <UserDetails userHistoryList={userHistoryList} editUser={editUser} isLoading = {isLoading}/>
         </Route>
         <Route  path="/">
           <UserForm addUser={addUser}/>
-          <UserTable usersList={userHistoryList} removeUser={removeUser}/>
+          <UserTable usersList={userHistoryList} removeUser={removeUser} loadHistory={loadHistory} isLoading = {isLoading}/>
         </Route>
       </Switch>
     </BrowserRouter>    
