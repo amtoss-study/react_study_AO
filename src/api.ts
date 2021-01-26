@@ -44,3 +44,6 @@ export const del = (url: string) =>
   })
     .then(processResponse)
     .catch(processUnknownError);
+    
+const api = { get, post, put, patch, del };
+export default api;

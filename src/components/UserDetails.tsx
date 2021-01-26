@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { UserItem } from './types'
+import { UserItem } from '../containers/Entities/Users/types'
 import UserForm from './UserForm'
 
 type Props = {

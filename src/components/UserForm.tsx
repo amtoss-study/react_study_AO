@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { UserItem } from './types'
+import { UserItem } from '../containers/Entities/Users/types';
 type Props = {
     addUser: (userInfo: UserItem) => void
 }

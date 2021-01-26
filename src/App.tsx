@@ -1,28 +1,24 @@
-import React, { useState } from 'react';
-import './App.css';
-import UserForm from './components/UserForm';
-import UserTable from './components/UserTable';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Nav from './components/Nav';
-import UserDetails from './components/UserDetails';
-import useUsers from './hooks/useUsers'
+import React from "react";
+import { Provider } from "react-redux";
+import Nav from "./components/Nav";
+import { Route, Switch, Router } from "react-router-dom";
+import store, { history } from "./store";
+import { userDetailsPath, userListPath } from "./urls";
 
-const App = () => {     
-  const { userHistoryList, isLoading, loadHistory, addUser, editUser, removeUser } = useUsers()  
-  
+const App = () => {       
   return(
-    <BrowserRouter>
-      <Nav />
-      <Switch>
-        <Route path="/users/:userId">
-            <UserDetails userHistoryList={userHistoryList} editUser={editUser} isLoading = {isLoading}/>
-        </Route>
-        <Route  path="/">
-          <UserForm addUser={addUser}/>
-          <UserTable usersList={userHistoryList} removeUser={removeUser} loadHistory={loadHistory} isLoading = {isLoading}/>
-        </Route>
-      </Switch>
-    </BrowserRouter>    
+    <Provider store={store}>
+      <Router history={history}>
+        <Nav/>
+        <Switch>
+          <Route path={userListPath} exact={true} component={userListPath} />
+          <Route path={userDetailsPath} component={userDetailsPath} />
+          <Route>
+            <h1>Page not found</h1>
+          </Route>
+        </Switch>
+      </Router>
+    </Provider>    
   )
 }
 export default App;
