@@ -6,8 +6,9 @@ import UserForm from './UserForm'
 type Props = {
     userHistoryList: UserItem[]
     editUser: (userInfo: UserItem) => void
+    isLoading: boolean
 }
-const UserDetails = ({userHistoryList, editUser}: Props) => {
+const UserDetails = ({userHistoryList, editUser, isLoading }: Props) => {
     const {userId} = useParams<{userId: string}>();
     const [isEditing, setEditing] = useState(false);
     const user = userHistoryList.find(item => item.id.toString() === userId);
@@ -26,9 +27,13 @@ const UserDetails = ({userHistoryList, editUser}: Props) => {
         padding: "0.5rem",
         border: "1px solid black"
     }
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
     return (
         <div style = {style}>
             <h3>User Details</h3>
+            
             {isEditing && (
                 <UserForm  addUser={onEdit}/>
             )}
